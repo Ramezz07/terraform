@@ -1,0 +1,30 @@
+terraform {
+  required_providers {
+    aws = {
+      source  = "hashicorp/aws"
+      version = "~> 5.0"
+    }
+  }
+}
+
+provider "aws" {
+  region = "ap-south-1"
+}
+
+resource "aws_instance" "kubeadm-worker2" {
+  ami                    = "ami-07a00cf47dbbc844c"
+  instance_type          = "t2.micro"
+  key_name               = "Linux-eks"
+  vpc_security_group_ids = ["sg-0e48f6b5e0d04e109"]
+  subnet_id              = "subnet-035c410a1f1692392"
+
+  associate_public_ip_address = true
+
+  root_block_device {
+    volume_size = 30 # Size in GB
+    volume_type = "gp3"
+  }
+  tags = {
+    Name = "kubeadm-worker2"
+  }
+}
